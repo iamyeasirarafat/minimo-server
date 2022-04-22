@@ -25,6 +25,13 @@ const run = async () => {
             const result = await postDatabase.insertOne(post);
             res.send(result);
         });
+        // get all the blogs
+        app.get('/', async (req, res) => {
+            const query = {}
+            const cursor = postDatabase.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
         //get blogs by author 
         app.get('/:uid', async (req, res) => {
             const authorId = req.params.uid;
@@ -67,8 +74,6 @@ const run = async () => {
     }
 }
 run().catch(console.dir)
-app.get('/', (req, res) => {
-    res.send('this is your response')
-})
+
 app.listen(port)
 
