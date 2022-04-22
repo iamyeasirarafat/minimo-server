@@ -19,11 +19,13 @@ const run = async () => {
     try {
         await client.connect();
         const postDatabase = client.db('minimo-post').collection('posts');
+        // post a blog   
         app.post('/', async (req, res) => {
             const post = req.body;
             const result = await postDatabase.insertOne(post);
             res.send(result);
         });
+        //get blogs by author 
         app.get('/:uid', async (req, res) => {
             const authorId = req.params.uid;
             const query = { authorId: authorId }
@@ -31,12 +33,15 @@ const run = async () => {
             const result = await cursor.toArray();
             res.send(result);
         })
-        app.delete('/:id', async (req, res) => {
+        //get a specific blog by ObjectId
+        app.get('/post/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const result = await postDatabase.deleteOne(query);
-            res.send(result)
+            const query = { _id: ObjectId(id) }
+            const result = await postDatabase.findOne(query);
+            res.send(result);
         })
+
+        // update a blog
         app.put('/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
@@ -47,6 +52,14 @@ const run = async () => {
             const result = await postDatabase.updateOne(query, updatedPost);
             res.send(result);
         })
+        //delete a blog
+        app.delete('/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await postDatabase.deleteOne(query);
+            res.send(result)
+        })
+       
     }
 
     finally {
