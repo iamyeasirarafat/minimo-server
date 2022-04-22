@@ -11,7 +11,7 @@ app.use(express.json());
 
 // mongo db connection
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ilylj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
@@ -29,6 +29,22 @@ const run = async () => {
             const query = { authorId: authorId }
             const cursor = postDatabase.find(query);
             const result = await cursor.toArray();
+            res.send(result);
+        })
+        app.delete('/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await postDatabase.deleteOne(query);
+            res.send(result)
+        })
+        app.put('/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const post = req.body;
+            const updatedPost = {
+                $set: post
+            }
+            const result = await postDatabase.updateOne(query, updatedPost);
             res.send(result);
         })
     }
