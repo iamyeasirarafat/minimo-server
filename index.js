@@ -23,8 +23,16 @@ const run = async () => {
             const post = req.body;
             const result = await postDatabase.insertOne(post);
             res.send(result);
+        });
+        app.get('/:uid', async (req, res) => {
+            const authorId = req.params.uid;
+            const query = { authorId: authorId }
+            const cursor = postDatabase.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
         })
     }
+
     finally {
 
     }
