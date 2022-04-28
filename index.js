@@ -9,6 +9,9 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+app.get('/', function (req, res) {
+    res.send('app s runnig')
+})
 // mongo db connection
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
@@ -66,13 +69,14 @@ const run = async () => {
             const result = await postDatabase.deleteOne(query);
             res.send(result)
         })
-       
+
     }
 
     finally {
 
     }
 }
+
 run().catch(console.dir)
 
 app.listen(port)
