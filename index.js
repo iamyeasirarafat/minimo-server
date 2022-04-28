@@ -9,9 +9,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-app.get('/', function (req, res) {
-    res.send('app s runnig')
-})
+
 // mongo db connection
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
